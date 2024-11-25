@@ -3,7 +3,18 @@ class GameState:
         self.__level = 1
         self.__running = True
         self.__fps = 60
+        self.__direction = "r"
 
+    @property
+    def direction(self):
+        return self.__direction
+    
+    @direction.setter
+    def direction(self, value):
+        if value not in ['r','l','u','d']:
+            raise ValueError("Unknown direction")
+        self.__direction = value
+        
     @property
     def level(self):
         return self.__level

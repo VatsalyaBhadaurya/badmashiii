@@ -40,3 +40,12 @@ def get_coords_from_idx(pacman_pos,
     y_coord += cell_h * 0.15
     # print(f"x_idx: {x}, y_idx: {y}, x_cord:{x_coord}, y_coord: {y_coord}")
     return x_coord, y_coord
+
+def get_idx_from_coords(x_coord, 
+                        y_coord, 
+                        start_x,
+                        start_y,
+                        cell_size):
+    x_pos = int((x_coord - start_x) // cell_size)
+    y_pos = int((y_coord - start_y) // cell_size)
+    return x_pos, y_pos

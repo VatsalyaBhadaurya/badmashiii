@@ -25,7 +25,12 @@ class PacmanGrid:
         self.pacman = Pacman(self.pacman_x, 
                              self.pacman_y,
                              PACMAN[0],
-                             PACMAN[1])
+                             PACMAN[1],
+                             game_state,
+                             self._pacman_pos,
+                             self.start_x,
+                             self.start_y,
+                             self._matrix)
 
     def get_json(self, path):
         with open(path) as fp:
@@ -48,7 +53,8 @@ class PacmanGrid:
         self.pacman_x, self.pacman_y = get_coords_from_idx(self._pacman_pos,
                                                            self.start_x, self.start_y,
                                                            CELL_SIZE[0], CELL_SIZE[1],
-                                                           num_rows, num_cols)
+                                                           num_rows, num_cols,
+                                                           )
         self.num_rows = num_rows
         self.num_cols = num_cols
 
