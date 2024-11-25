@@ -1,0 +1,37 @@
+matrix = [
+["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall",],
+["wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void",],
+["void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void",],
+["wall","wall","wall","wall","wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["void","void","void","void","wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","wall","wall","wall","wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","void","wall",],
+["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall",],
+]
+
+for row in matrix:
+    for col in row:
+        print(col)
