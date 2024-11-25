@@ -56,16 +56,26 @@ class PacmanGrid:
     def draw_dot(self, **kwargs):
         circle_x = kwargs['x'] + kwargs['w']
         circle_y = kwargs['y'] + kwargs['h']
-        draw.circle(self._screen, 
-                    Colors.WHITE,
-                    (circle_x, circle_y),
-                    5)
+        draw.rect(self._screen, 
+                  Colors.WHITE, 
+                  (circle_x, 
+                    circle_y, 
+                   5,5)
+                  )
     
     def draw_special_point(self):
         ...
 
-    def draw_power(self):
-        ...
+    def draw_power(self, **kwargs):
+        circle_x = kwargs['x'] + kwargs['w']
+        circle_y = kwargs['y'] + kwargs['h']
+        draw.circle(self._screen, 
+                  Colors.YELLOW, 
+                  (circle_x, 
+                    circle_y, 
+                   ),
+                   7
+                  )
     
     def draw_elec(self, **kwargs):
         draw.rect(self._screen,

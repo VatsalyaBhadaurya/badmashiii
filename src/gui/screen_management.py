@@ -9,5 +9,5 @@ class ScreenManager:
         self.pacman = PacmanGrid(screen, game_state)
 
     def draw_screens(self):
-        self.pacman.draw_outliners()
+        # self.pacman.draw_outliners()
         self.pacman.draw_level()
