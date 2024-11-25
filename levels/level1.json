@@ -11,14 +11,14 @@
     ["wall", "void", "void", "void", "void", "void", "void", "void", "void", "wall", "void", "void", "void", "void", "void", "void", "void", "wall", "void", "void", "void", "void", "void", "void", "void", "wall", "void", "void", "void", "void", "void", "void", "void", "void", "wall"],
     ["wall", "void", "void", "void", "void", "void", "void", "void", "void", "wall", "void", "void", "void", "void", "void", "void", "void", "wall", "void", "void", "void", "void", "void", "void", "void", "wall", "void", "void", "void", "void", "void", "void", "void", "void", "wall"],
     ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "void", "void", "wall", "wall", "wall", "wall", "wall", "wall", "void", "void", "wall", "void", "void", "wall", "wall", "wall", "wall", "wall", "wall", "void", "void", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
-    ["void", "void", "void", "void", "void", "void", "wall", "void", "void", "wall", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "wall", "void", "void", "wall", "void", "void", "void", "void", "void", "void"],
-    ["void", "void", "void", "void", "void", "void", "wall", "void", "void", "wall", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "wall", "void", "void", "wall", "void", "void", "void", "void", "void", "void"],
+    ["null", "null", "null", "null", "null", "null", "wall", "void", "void", "wall", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "wall", "void", "void", "wall", "null", "null", "null", "null", "null", "null"],
+    ["null", "null", "null", "null", "null", "null", "wall", "void", "void", "wall", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "wall", "void", "void", "wall", "null", "null", "null", "null", "null", "null"],
     ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "void", "void", "wall", "void", "void", "wall", "wall", "wall", "wall", "elec", "elec", "elec", "wall", "wall", "wall", "wall", "void", "void", "wall", "void", "void", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
     ["void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "wall", "null", "null", "null", "null", "null", "null", "null", "null", "null", "wall", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void"],
     ["void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "wall", "null", "null", "null", "null", "null", "null", "null", "null", "null", "wall", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void"],
     ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "void", "void", "wall", "void", "void", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "void", "void", "wall", "void", "void", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
-    ["void", "void", "void", "void", "void", "void", "wall", "void", "void", "wall", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "wall", "void", "void", "wall", "void", "void", "void", "void", "void", "void"],
-    ["void", "void", "void", "void", "void", "void", "wall", "void", "void", "wall", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "wall", "void", "void", "wall", "void", "void", "void", "void", "void", "void"],
+    ["null", "null", "null", "null", "null", "null", "wall", "void", "void", "wall", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "wall", "void", "void", "wall", "null", "null", "null", "null", "null", "null"],
+    ["null", "null", "null", "null", "null", "null", "wall", "void", "void", "wall", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "wall", "void", "void", "wall", "null", "null", "null", "null", "null", "null"],
     ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "void", "void", "wall", "void", "void", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "void", "void", "wall", "void", "void", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
     ["wall", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "wall", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "wall"],
     ["wall", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "wall", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "wall"],
@@ -32,14 +32,11 @@
     ["wall", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "wall"],
     ["wall", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "wall"],
     ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"]
-
-
-
 ],
   "pacman_start": [],
   "ghost_den": [],
   "extra_voids": [],
-  "num_rows": 31,
+  "num_rows": 32,
   "num_cols": 35,
   "cell_width": 20,
   "cell_height": 20
