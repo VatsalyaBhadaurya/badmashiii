@@ -1185,7 +1185,7 @@
             "wall"
         ]
     ],
-    "pacman_start": [],
+    "pacman_start": [17, 16],
     "ghost_den": [],
     "extra_voids": [],
     "num_rows": 32,

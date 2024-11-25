@@ -1,6 +1,8 @@
 from src.configs import *
 from pygame import draw
-from src.utils.coord_utils import place_elements_offset
+from src.utils.coord_utils import place_elements_offset, get_coords_from_idx
+from src.utils.draw_utils import draw_rect, draw_circle
+from src.sprites.pacman import Pacman
 
 import json
 
@@ -20,6 +22,10 @@ class PacmanGrid:
         self._game_state = game_state
         self._level_number = self._game_state.level
         self.load_level(self._level_number)
+        self.pacman = Pacman(self.pacman_x, 
+                             self.pacman_y,
+                             PACMAN[0],
+                             PACMAN[1])
 
     def get_json(self, path):
         with open(path) as fp:
@@ -32,12 +38,17 @@ class PacmanGrid:
         num_rows = level_json['num_rows']
         num_cols = level_json['num_cols']
         self._matrix = level_json['matrix']
+        # self._matrix[-9][15] = "power"
         self._pacman_pos = level_json['pacman_start']
         self.start_x, self.start_y = place_elements_offset(SCREEN_WIDTH,
                                                     SCREEN_HEIGHT,
                                                     CELL_SIZE[0]*num_cols,
                                                     CELL_SIZE[0]*num_rows,
                                                     0.15, 0.5)
+        self.pacman_x, self.pacman_y = get_coords_from_idx(self._pacman_pos,
+                                                           self.start_x, self.start_y,
+                                                           CELL_SIZE[0], CELL_SIZE[1],
+                                                           num_rows, num_cols)
         self.num_rows = num_rows
         self.num_cols = num_cols
 
@@ -45,23 +56,16 @@ class PacmanGrid:
         ...
 
     def draw_wall(self, **kwargs):
-        draw.rect(self._screen, 
-                  Colors.WALL, 
-                  (kwargs['x'], 
+        draw_rect(kwargs['x'], 
                    kwargs['y'], 
                    kwargs['w'], 
-                   kwargs['h'])
-                  )
+                   kwargs['h'], self._screen, Colors.WALL)
 
     def draw_dot(self, **kwargs):
-        circle_x = kwargs['x'] + kwargs['w']
-        circle_y = kwargs['y'] + kwargs['h']
-        draw.rect(self._screen, 
-                  Colors.WHITE, 
-                  (circle_x, 
-                    circle_y, 
-                   5,5)
-                  )
+        dot_x = kwargs['x'] + kwargs['w']
+        dot_y = kwargs['y'] + kwargs['h']
+        draw_rect(dot_x, dot_y, 5, 
+                  5, self._screen, Colors.WHITE)
     
     def draw_special_point(self):
         ...
@@ -69,27 +73,18 @@ class PacmanGrid:
     def draw_power(self, **kwargs):
         circle_x = kwargs['x'] + kwargs['w']
         circle_y = kwargs['y'] + kwargs['h']
-        draw.circle(self._screen, 
-                  Colors.YELLOW, 
-                  (circle_x, 
-                    circle_y, 
-                   ),
-                   7
-                  )
+        draw_circle(circle_x, circle_y, 
+                    7, self._screen, Colors.YELLOW)
     
     def draw_elec(self, **kwargs):
-        draw.rect(self._screen,
-                  Colors.RED,
-                  (kwargs['x'], 
-                   kwargs['y'], 
-                   kwargs['w'], 
-                   1)
-                  )
+        draw_rect(kwargs['x'], 
+                  kwargs['y'], kwargs['w'], 
+                  1, self._screen, Colors.RED)
 
     def draw_level(self):
         curr_x, curr_y = self.start_x, self.start_y
-        for row_idx, row in enumerate(self._matrix):
-            for col_idx, col in enumerate(row):
+        for _, row in enumerate(self._matrix):
+            for _, col in enumerate(row):
                 draw_func = self.function_mapper[col]
                 draw_func(x=curr_x, 
                           y=curr_y, 
