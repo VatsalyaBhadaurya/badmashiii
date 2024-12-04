@@ -519,7 +519,7 @@
             "wall"
         ],
         [
-            "dot",
+            "void",
             "dot",
             "dot",
             "dot",
@@ -552,8 +552,8 @@
             "dot",
             "dot",
             "dot",
-            "dot",
-            "dot"
+            "void",
+            "void"
         ],
         [
             "void",
@@ -1185,7 +1185,10 @@
             "wall"
         ]
     ],
-    "pacman_start": [17, 16],
+    "pacman_start": [
+        17,
+        16
+    ],
     "ghost_den": [],
     "extra_voids": [],
     "num_rows": 32,

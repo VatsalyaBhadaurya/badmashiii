@@ -6,6 +6,8 @@ from src.sprites.sprite_configs import *
 from src.configs import CELL_SIZE, Colors, PACMAN_SPEED
 from src.utils.coord_utils import get_idx_from_coords
 
+from math import ceil
+
 class Pacman(Sprite):
     def __init__(self, x, y, 
                  width, height,
@@ -39,11 +41,9 @@ class Pacman(Sprite):
         self.tiny_start_x = self.xidx * self.subdiv
         self.tiny_start_y = self.yidx * self.subdiv
         self.move_direction = self.game_state.direction
+        self.is_move = True
 
     def build_bounding_box(self, x, y):
-        draw.rect(self.screen, Colors.GREEN, 
-                  (x, y, CELL_SIZE[0] *2,
-                   CELL_SIZE[0] * 2), 1)
         self.rect.x = x + (CELL_SIZE[0] * 2 - self.rect.width) // 2
         self.rect.y = y + (CELL_SIZE[1] * 2 - self.rect.height) // 2
     
@@ -74,43 +74,73 @@ class Pacman(Sprite):
         self.build_bounding_box(self.rect_x, self.rect_y)
     
     def frame_direction_update(self):
-        direc = self.game_state.direction
+        direc = self.move_direction
         if direc != "":
             self.frames = self.direction_mapper[direc]
-    
-    def move_pacman(self):
-        def edges_helper_vertical(row, col, additive):
+
+    def edges_helper_vertical(self, row, col, additive):
             for r in range(self.subdiv * 2):
                 if self.tiny_matrix[row+r][col + additive] == 'wall':
                     return False
             return True
         
-        def edge_helper_horizontal(row, col, additive):
-            for c in range(self.subdiv * 2):
-                if self.tiny_matrix[row + additive][col + c] == 'wall':
-                    return False
-            return True
+    def edge_helper_horizontal(self, row, col, additive):
+        for c in range(self.subdiv * 2):
+            if self.tiny_matrix[row + additive][col + c] == 'wall':
+                return False
+        return True
+    
+    def boundary_check(self):
+        bound_x = int(ceil(self.tiny_start_x/PACMAN_SPEED))
+        if (self.tiny_start_y + self.subdiv * 2) >= len(self.tiny_matrix[0])-1:
+            self.tiny_start_y = 0
+            self.rect_x = self.coord_matrix[bound_x][0][0]
+
+        elif (self.tiny_start_y - 1) < 0:
+            self.tiny_start_y = len(self.tiny_matrix[0]) - 1
+            self.rect_x = self.coord_matrix[bound_x][-1][0]
         
+    
+    def movement_bind(self):
         if self.game_state.direction == 'l':
-            if edges_helper_vertical(self.tiny_start_x, self.tiny_start_y, -1):
+            if self.edges_helper_vertical(self.tiny_start_x, self.tiny_start_y, -1):
+                self.move_direction = 'l'
+
+        elif self.game_state.direction == 'r':
+            if self.edges_helper_vertical(self.tiny_start_x, self.tiny_start_y, self.subdiv * 2):
+                self.move_direction = 'r'
+        
+        elif self.game_state.direction == 'u':
+            if self.edge_helper_horizontal(self.tiny_start_x, self.tiny_start_y, -1):
+                self.move_direction = 'u'
+
+        elif self.game_state.direction == 'd':
+            if self.edge_helper_horizontal(self.tiny_start_x, self.tiny_start_y, self.subdiv * 2):
+                self.move_direction = 'd'
+
+    def move_pacman(self):
+        if self.move_direction == 'l':
+            if self.edges_helper_vertical(self.tiny_start_x, self.tiny_start_y, -1):
                 self.rect_x -= PACMAN_SPEED
                 self.tiny_start_y -= 1
-        elif self.game_state.direction == 'r':
-            if edges_helper_vertical(self.tiny_start_x, self.tiny_start_y, self.subdiv * 2):
+        elif self.move_direction == 'r':
+            if self.edges_helper_vertical(self.tiny_start_x, self.tiny_start_y, self.subdiv * 2):
                 self.rect_x += PACMAN_SPEED
                 self.tiny_start_y += 1
-        elif self.game_state.direction == 'u':
-            if edge_helper_horizontal(self.tiny_start_x, self.tiny_start_y, -1):
+        elif self.move_direction == 'u':
+            if self.edge_helper_horizontal(self.tiny_start_x, self.tiny_start_y, -1):
                 self.rect_y -= PACMAN_SPEED
                 self.tiny_start_x -= 1
-        elif self.game_state.direction == 'd':
-            if edge_helper_horizontal(self.tiny_start_x, self.tiny_start_y, self.subdiv * 2):
+        elif self.move_direction == 'd':
+            if self.edge_helper_horizontal(self.tiny_start_x, self.tiny_start_y, self.subdiv * 2):
                 self.rect_y += PACMAN_SPEED
                 self.tiny_start_x += 1
         
             
     def update(self):
         self.frame_update()
+        self.movement_bind()
+        self.boundary_check()
         self.frame_direction_update()
         self.move_pacman()
 

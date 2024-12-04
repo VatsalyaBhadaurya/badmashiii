@@ -11,5 +11,5 @@ class ScreenManager:
         self.all_sprites.add(self.pacman.pacman)
 
     def draw_screens(self):
-        self.pacman.draw_outliners()
+        # self.pacman.draw_outliners()
         self.pacman.draw_level()
