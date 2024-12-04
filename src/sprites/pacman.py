@@ -1,9 +1,9 @@
 from pygame.sprite import Sprite
 from pygame import image, transform
-from pygame import draw
 
 from src.sprites.sprite_configs import *
-from src.configs import CELL_SIZE, Colors, PACMAN_SPEED
+from src.configs import CELL_SIZE, PACMAN_SPEED
+
 from src.utils.coord_utils import get_idx_from_coords
 
 from math import ceil
@@ -97,8 +97,8 @@ class Pacman(Sprite):
             self.rect_x = self.coord_matrix[bound_x][0][0]
 
         elif (self.tiny_start_y - 1) < 0:
-            self.tiny_start_y = len(self.tiny_matrix[0]) - 1
-            self.rect_x = self.coord_matrix[bound_x][-1][0]
+            self.tiny_start_y = len(self.tiny_matrix[0]) - (self.subdiv * 3)
+            self.rect_x = self.coord_matrix[bound_x][-3][0]
         
     
     def movement_bind(self):
@@ -136,6 +136,15 @@ class Pacman(Sprite):
                 self.rect_y += PACMAN_SPEED
                 self.tiny_start_x += 1
         
+    def eliminate_dots(self):
+        r, c = get_idx_from_coords(
+            self.rect.x, self.rect.y,
+            self.start_x,
+            self.start_y,
+            CELL_SIZE[0]
+        )
+        if self.matrix[r][c] == 'dot':
+            self.matrix[r][c] = 'void'
             
     def update(self):
         self.frame_update()
@@ -143,4 +152,5 @@ class Pacman(Sprite):
         self.boundary_check()
         self.frame_direction_update()
         self.move_pacman()
+        self.eliminate_dots()
 

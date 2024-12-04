@@ -1,5 +1,4 @@
 from src.configs import *
-from pygame import draw
 from src.utils.coord_utils import (place_elements_offset, 
                                     get_coords_from_idx, 
                                     precompute_matrix_coords)
