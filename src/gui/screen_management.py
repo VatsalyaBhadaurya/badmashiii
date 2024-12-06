@@ -1,6 +1,7 @@
 from src.configs import *
-from src.utils.coord_utils import center_element
 from src.gui.pacman_grid import *
+from src.utils.coord_utils import center_element
+
 
 class ScreenManager:
     def __init__(self, screen, game_state, all_sprites):

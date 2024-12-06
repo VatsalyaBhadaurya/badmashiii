@@ -1189,7 +1189,7 @@
         17,
         16
     ],
-    "ghost_den": [],
+    "ghost_den": [14, 15],
     "extra_voids": [],
     "num_rows": 32,
     "num_cols": 35,
