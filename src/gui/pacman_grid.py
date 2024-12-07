@@ -1,11 +1,11 @@
 import json
 
 from src.configs import *
+from src.sprites.ghosts import GhostManager
 from src.sprites.pacman import Pacman
 from src.utils.coord_utils import (get_coords_from_idx, place_elements_offset,
                                    precompute_matrix_coords)
-from src.utils.draw_utils import (draw_circle, draw_debug_rects, draw_rect,
-                                  get_tiny_matrix)
+from src.utils.draw_utils import (draw_circle, draw_debug_rects, draw_rect)
 
 
 class PacmanGrid:
@@ -23,10 +23,7 @@ class PacmanGrid:
         self._game_state = game_state
         self._level_number = self._game_state.level
         self.load_level(self._level_number)
-        self.tiny_matrix = get_tiny_matrix(self._matrix, CELL_SIZE[0], PACMAN_SPEED)
         self.pacman = Pacman(
-            self.pacman_x,
-            self.pacman_y,
             PACMAN[0],
             PACMAN[1],
             game_state,
@@ -36,9 +33,11 @@ class PacmanGrid:
             self._matrix,
             self._screen,
             self._coord_matrix,
-            self.tiny_matrix,
         )
-
+        self.ghost = GhostManager(self.ghost_den,
+                                  self.start_x, self.start_y,
+                                  self._matrix,
+                                  self._screen)
     def get_json(self, path):
         with open(path) as fp:
             payload = json.load(fp)
@@ -59,15 +58,6 @@ class PacmanGrid:
             CELL_SIZE[0] * num_rows,
             0.15,
             0.5,
-        )
-        self.pacman_x, self.pacman_y = get_coords_from_idx(
-            self._pacman_pos,
-            self.start_x,
-            self.start_y,
-            CELL_SIZE[0],
-            CELL_SIZE[1],
-            num_rows,
-            num_cols,
         )
         self._coord_matrix = precompute_matrix_coords(
             self.start_x, self.start_y, CELL_SIZE[0], num_rows, num_cols

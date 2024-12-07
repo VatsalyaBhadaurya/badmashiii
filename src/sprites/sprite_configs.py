@@ -22,7 +22,7 @@ PACMAN_PATHS = {
 }
 
 GHOST_PATHS = {
-    "inky": ["assets/ghosts/inkpy.png"],
+    "inky": ["assets/ghosts/inky.png"],
     "pinky": ["assets/ghosts/pinky.png"],
     "blinky": ["assets/ghosts/blinky.png"],
     "clyde": ["assets/ghosts/clyde.png"],

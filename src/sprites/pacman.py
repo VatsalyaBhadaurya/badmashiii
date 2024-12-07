@@ -5,14 +5,12 @@ from pygame.sprite import Sprite
 
 from src.configs import CELL_SIZE, PACMAN_SPEED
 from src.sprites.sprite_configs import *
-from src.utils.coord_utils import get_idx_from_coords
+from src.utils.coord_utils import get_coords_from_idx, get_idx_from_coords, get_tiny_matrix
 
 
 class Pacman(Sprite):
     def __init__(
         self,
-        x,
-        y,
         width,
         height,
         game_state,
@@ -22,10 +20,18 @@ class Pacman(Sprite):
         matrix,
         screen,
         coord_matrix,
-        tiny_matrix,
         frame_rate=5,
     ):
         super().__init__()
+        x, y = get_coords_from_idx(
+            pacman_pos,
+            start_x,
+            start_y,
+            CELL_SIZE[0],
+            CELL_SIZE[1],
+            len(matrix),
+            len(matrix[0]),
+        )
         self.screen = screen
         self.load_all_frames(width, height)
         self.frames = self.right_frames
@@ -41,7 +47,7 @@ class Pacman(Sprite):
         self.start_y = start_y
         self.matrix = matrix
         self.coord_matrix = coord_matrix
-        self.tiny_matrix = tiny_matrix
+        self.tiny_matrix = get_tiny_matrix(self.matrix, CELL_SIZE[0], PACMAN_SPEED)
         self.subdiv = CELL_SIZE[0] // PACMAN_SPEED
         self.tiny_start_x = self.xidx * self.subdiv
         self.tiny_start_y = self.yidx * self.subdiv

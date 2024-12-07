@@ -17,22 +17,3 @@ def draw_debug_rects(start_x, start_y, num_rows, num_cols, cell_size, color, scr
             curr_x += cell_size
         curr_y += cell_size
         curr_x = start_x
-
-
-def get_tiny_matrix(matrix, cell_size, pacman_speed):
-    sub_div = cell_size // pacman_speed
-    num_rows = len(matrix) * sub_div
-    num_cols = len(matrix[0]) * sub_div
-    tiny_matrix = [["null"] * num_cols for _ in range(num_rows)]
-    tiny_r, tiny_c = 0, 0
-    for row in matrix:
-        for cell in row:
-            if cell != "wall":
-                cell = "null"
-            for sx in range(sub_div):
-                for sy in range(sub_div):
-                    tiny_matrix[tiny_r + sx][tiny_c + sy] = cell
-            tiny_c += sub_div
-        tiny_r += sub_div
-        tiny_c = 0
-    return tiny_matrix

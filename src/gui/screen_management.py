@@ -10,6 +10,8 @@ class ScreenManager:
         self.all_sprites = all_sprites
         self.pacman = PacmanGrid(screen, game_state)
         self.all_sprites.add(self.pacman.pacman)
+        for ghost in self.pacman.ghost.ghosts_list:
+            self.all_sprites.add(ghost)
 
     def draw_screens(self):
         # self.pacman.draw_outliners()
