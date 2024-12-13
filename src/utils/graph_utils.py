@@ -4,7 +4,13 @@ def a_star(matrix, start, target):
     rows, cols = len(matrix), len(matrix[0])
 
     def is_valid(x, y):
-        return 0 <= x < rows and 0 <= y < cols and matrix[x][y] != 'wall'
+        """Check if all four required cells are valid."""
+        return (
+            0 <= x < rows and 0 <= y < cols and matrix[x][y] != 'wall' and
+            0 <= x + 1 < rows and matrix[x + 1][y] != 'wall' and
+            0 <= y + 1 < cols and matrix[x][y + 1] != 'wall' and
+            0 <= x + 1 < rows and 0 <= y + 1 < cols and matrix[x + 1][y + 1] != 'wall'
+        )
 
     def heuristic(a, b):
         """Calculate Manhattan distance."""

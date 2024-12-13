@@ -28,3 +28,4 @@ GHOST_PATHS = {
     "clyde": ["assets/ghosts/clyde.png"],
     "blue": ["assets/ghosts/blue_ghost.png"]
 }
+

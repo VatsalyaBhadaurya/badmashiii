@@ -70,8 +70,34 @@ def get_tiny_matrix(matrix, cell_size, pacman_speed):
 
 def get_movable_locations(matrix):
     movables = []
-    for r_idx, row in enumerate(matrix):
-        for c_idx, cell in enumerate(row):
-            if cell != 'wall' or cell != 'elec':
+    rows, cols = len(matrix), len(matrix[0])  # Matrix dimensions
+
+    def is_free(r, c):
+        return 0 <= r < rows and 0 <= c < cols and matrix[r][c] not in ('wall', 'elec')
+
+    for r_idx in range(rows):
+        for c_idx in range(cols):
+            if (
+                is_free(r_idx, c_idx) and
+                is_free(r_idx + 1, c_idx) and
+                is_free(r_idx + 1, c_idx + 1) and
+                is_free(r_idx, c_idx + 1)
+            ):
                 movables.append((r_idx, c_idx))
+
     return movables
+
+def is_any_wall(matrix, x, y):
+    rows, cols = len(matrix), len(matrix[0])  # Matrix dimensions
+
+    def is_wall(r, c):
+        """Check if the cell is 'wall' and within bounds."""
+        return 0 <= r < rows and 0 <= c < cols and matrix[r][c] == 'wall'
+
+    # Check all four positions
+    return (
+        is_wall(x, y) or
+        is_wall(x, y + 1) or
+        is_wall(x + 1, y + 1) or
+        is_wall(x + 1, y)
+    )

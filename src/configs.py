@@ -18,3 +18,18 @@ GHOSTS = (32, 32)
 PACMAN_SPEED = 4
 GHOST_SPEED_FAST = 5
 GHOST_SPEED_SLOW = 2
+
+GHOST_DELAYS = {
+    "inky": 8000,
+    "pinky": 12000,
+    "blinky": 4000,
+    "clyde": 16000,
+    "blue": 0
+}
+GHOST_TARGET_CHANGE = {
+    "inky": 8,
+    "pinky": 10,
+    "blinky": 6,
+    "clyde": 7,
+    "blue": 7
+}
