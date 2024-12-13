@@ -67,3 +67,11 @@ def get_tiny_matrix(matrix, cell_size, pacman_speed):
         tiny_r += sub_div
         tiny_c = 0
     return tiny_matrix
+
+def get_movable_locations(matrix):
+    movables = []
+    for r_idx, row in enumerate(matrix):
+        for c_idx, cell in enumerate(row):
+            if cell != 'wall' or cell != 'elec':
+                movables.append((r_idx, c_idx))
+    return movables

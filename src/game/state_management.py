@@ -4,6 +4,15 @@ class GameState:
         self.__running = True
         self.__fps = 60
         self.__direction = ""
+        self.__current_time = None
+    
+    @property
+    def current_time(self):
+        return self.__current_time
+    
+    @current_time.setter
+    def current_time(self, val):
+        self.__current_time = val
 
     @property
     def direction(self):

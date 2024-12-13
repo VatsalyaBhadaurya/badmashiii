@@ -37,6 +37,8 @@ class PacmanGrid:
         self.ghost = GhostManager(self.ghost_den,
                                   self.start_x, self.start_y,
                                   self._matrix,
+                                  self.elec_pos,
+                                  self._game_state,
                                   self._screen)
     def get_json(self, path):
         with open(path) as fp:
@@ -51,6 +53,7 @@ class PacmanGrid:
         self.ghost_den = level_json['ghost_den']
         self._matrix = level_json["matrix"]
         self._pacman_pos = level_json["pacman_start"]
+        self.elec_pos = level_json['elec']
         self.start_x, self.start_y = place_elements_offset(
             SCREEN_WIDTH,
             SCREEN_HEIGHT,

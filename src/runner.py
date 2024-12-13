@@ -21,6 +21,7 @@ class GameRun:
     def main(self):
         clock = pygame.time.Clock()
         while self.game_state.running:
+            self.game_state.current_time = pygame.time.get_ticks()
             for event in pygame.event.get():
                 self.events.handle_events(event)
             self.screen.fill(Colors.BLACK)
