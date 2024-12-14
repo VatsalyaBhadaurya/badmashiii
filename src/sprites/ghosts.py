@@ -131,6 +131,7 @@ class Ghost(Sprite):
                                          len(self.tiny_matrix_fast[0]))
         self.ghost_x = xcoord
         self.ghost_y = ycoord
+        draw.rect(self.screen, Colors.RED, (xcoord, ycoord, 5,5))
         self.xidx = x
         self.yidx = y
         self.curr_idx += 1
@@ -272,5 +273,9 @@ class GhostManager:
     def tiny_matrix_loader(self):
         self.matrix_5px = get_tiny_matrix(self.matrix, CELL_SIZE[0], GHOST_SPEED_FAST)
         self.matrix_2px = get_tiny_matrix(self.matrix, CELL_SIZE[0], GHOST_SPEED_SLOW)
-        self.movables_5px = get_movable_locations(self.matrix_5px)
-        self.movables_2px = get_movable_locations(self.matrix_2px)
+        self.movables_5px = get_movable_locations(self.matrix_5px, 
+                                                  max_cell_size=CELL_SIZE[0],
+                                                  cell_size=GHOST_SPEED_FAST)
+        self.movables_2px = get_movable_locations(self.matrix_2px,
+                                                  max_cell_size=CELL_SIZE[0],
+                                                  cell_size=GHOST_SPEED_SLOW)

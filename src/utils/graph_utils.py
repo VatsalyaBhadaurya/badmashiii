@@ -1,16 +1,17 @@
 import heapq
 
-def a_star(matrix, start, target):
+def a_star(matrix, start, target, subdivs=4):
     rows, cols = len(matrix), len(matrix[0])
 
     def is_valid(x, y):
-        """Check if all four required cells are valid."""
-        return (
-            0 <= x < rows and 0 <= y < cols and matrix[x][y] != 'wall' and
-            0 <= x + 1 < rows and matrix[x + 1][y] != 'wall' and
-            0 <= y + 1 < cols and matrix[x][y + 1] != 'wall' and
-            0 <= x + 1 < rows and 0 <= y + 1 < cols and matrix[x + 1][y + 1] != 'wall'
-        )
+        """Check if all cells in the subdivs x subdivs block are valid."""
+        if not (0 <= x < rows and 0 <= y < cols):
+            return False
+        for dx in range(subdivs*2):
+            for dy in range(subdivs*2):
+                if x + dx >= rows or y + dy >= cols or matrix[x + dx][y + dy] == 'wall':
+                    return False
+        return True
 
     def heuristic(a, b):
         """Calculate Manhattan distance."""

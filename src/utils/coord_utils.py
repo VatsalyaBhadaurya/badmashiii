@@ -68,21 +68,26 @@ def get_tiny_matrix(matrix, cell_size, pacman_speed):
         tiny_c = 0
     return tiny_matrix
 
-def get_movable_locations(matrix):
+def get_movable_locations(matrix, max_cell_size=20, 
+                          cell_size=20):
     movables = []
     rows, cols = len(matrix), len(matrix[0])  # Matrix dimensions
+    subdiv = max_cell_size // cell_size
 
     def is_free(r, c):
         return 0 <= r < rows and 0 <= c < cols and matrix[r][c] not in ('wall', 'elec')
+    
+    def is_valid(r, c):
+        for x in range(subdiv*2):
+            for y in range(subdiv*2):
+                if not is_free(r+x, c+y):
+                    return False
+        return True
 
     for r_idx in range(rows):
         for c_idx in range(cols):
-            if (
-                is_free(r_idx, c_idx) and
-                is_free(r_idx + 1, c_idx) and
-                is_free(r_idx + 1, c_idx + 1) and
-                is_free(r_idx, c_idx + 1)
-            ):
+            if (r_idx + (subdiv*2) <= rows and \
+                 c_idx + (subdiv*2) <= cols) and is_valid(r_idx, c_idx):
                 movables.append((r_idx, c_idx))
 
     return movables
