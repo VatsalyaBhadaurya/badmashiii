@@ -153,6 +153,8 @@ class Pacman(Sprite):
             ):
                 self.rect_y += PACMAN_SPEED
                 self.tiny_start_x += 1
+        self.game_state.pacman_rect = (self.rect_x, self.rect_y, 
+                                       CELL_SIZE[0]*2, CELL_SIZE[0]*2)
 
     def eliminate_dots(self):
         r, c = get_idx_from_coords(

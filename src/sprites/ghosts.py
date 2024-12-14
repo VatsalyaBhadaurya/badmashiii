@@ -6,7 +6,7 @@ from src.configs import *
 from src.utils.coord_utils import (get_coords_from_idx, 
                                    get_tiny_matrix, 
                                    get_movable_locations,
-                                   is_any_wall)
+                                   get_idx_from_coords)
 from src.utils.graph_utils import a_star
 from src.sprites.sprite_configs import GHOST_PATHS
 
@@ -105,14 +105,12 @@ class Ghost(Sprite):
             return True
         if self.target == (self.xidx, self.yidx):
             return True
+        if self.paths and self.curr_idx == len(self.paths)-1:
+            return True
         return False
 
     def set_paths(self, movables):
-        target = random.choice(movables)
-        start = (self.xidx, self.yidx)
-        self.paths = a_star(self.tiny_matrix_fast, start, target)
-        self.curr_idx = 0
-        self.target = target
+        ...
 
     def move_ghost(self):
         if not self.released:
@@ -131,13 +129,9 @@ class Ghost(Sprite):
                                          len(self.tiny_matrix_fast[0]))
         self.ghost_x = xcoord
         self.ghost_y = ycoord
-        draw.rect(self.screen, Colors.RED, (xcoord, ycoord, 5,5))
         self.xidx = x
         self.yidx = y
         self.curr_idx += 1
-
-    def path_finding(self, movables):
-        pass
 
     def update(self):
         self.draw_ghost()
@@ -156,8 +150,21 @@ class Blinky(Ghost):
         self.release_time = self.release_delay + self.start_time
         self.target_change_delay = self.release_time + GHOST_TARGET_CHANGE['blinky']
 
-    def path_finding(self, movables):
-        ...
+    def lock_on_target(self):
+        pacman_pos = self.game_state.pacman_rect
+        pac_x, pac_y = pacman_pos[0], pacman_pos[1]
+        return get_idx_from_coords(pac_x, pac_y,
+                self.start_x,
+                self.start_y,
+                self.speed,
+            )
+    
+    def set_paths(self, movables):
+        target = self.lock_on_target()
+        start = (self.xidx, self.yidx)
+        self.paths = a_star(self.tiny_matrix_fast, start, target)
+        self.curr_idx = 0
+        self.target = target
             
 
 class Inky(Ghost):
@@ -173,8 +180,12 @@ class Inky(Ghost):
         self.release_time = self.release_delay + self.start_time
         self.target_change_delay = self.release_time + GHOST_TARGET_CHANGE['inky']
 
-    def path_finding(self, movables):
-        ...
+    def set_paths(self, movables):
+        target = random.choice(movables)
+        start = (self.xidx, self.yidx)
+        self.paths = a_star(self.tiny_matrix_fast, start, target)
+        self.curr_idx = 0
+        self.target = target
 
 class Pinky(Ghost):
     def __init__(self, ghost_pos: dict, start_x: float, 
@@ -188,9 +199,26 @@ class Pinky(Ghost):
         self.release_delay = GHOST_DELAYS['pinky']
         self.release_time = self.release_delay + self.start_time
         self.target_change_delay = self.release_time + GHOST_TARGET_CHANGE['pinky']
-
-    def path_finding(self, movables):
-        ...
+    
+    def lock_on_target(self):
+        moves = {"l":-16, "r":16, "u":-16, "d":16}
+        pacman_pos = self.game_state.pacman_rect
+        pac_x, pac_y = pacman_pos[0], pacman_pos[1]
+        xidx, yidx =  get_idx_from_coords(pac_x, pac_y,
+                self.start_x,
+                self.start_y,
+                self.speed,
+            )
+        if self.game_state.direction in ['l', 'r']:
+            return xidx + moves[self.game_state.direction], yidx
+        return xidx, yidx + moves[self.game_state.direction]
+        
+    def set_paths(self, movables):
+        target = self.lock_on_target()
+        start = (self.xidx, self.yidx)
+        self.paths = a_star(self.tiny_matrix_fast, start, target)
+        self.curr_idx = 0
+        self.target = target
 
 class Clyde(Ghost):
     def __init__(self, ghost_pos: dict, start_x: float, 
@@ -204,8 +232,12 @@ class Clyde(Ghost):
         self.release_time = self.release_delay + self.start_time
         self.target_change_delay = self.release_time + GHOST_TARGET_CHANGE['clyde']
 
-    def path_finding(self, movables):
-        ...
+    def set_paths(self, movables):
+        target = random.choice(movables)
+        start = (self.xidx, self.yidx)
+        self.paths = a_star(self.tiny_matrix_fast, start, target)
+        self.curr_idx = 0
+        self.target = target
 
 class GhostManager:
     def __init__(self,
@@ -229,7 +261,7 @@ class GhostManager:
 
     def load_ghosts(self):
         self.ghosts_list = []
-        ghosts = [Blinky,Inky,Pinky,Clyde]
+        ghosts = [Blinky,Pinky,Inky,Clyde]
         curr_pad = 0
         for ghost in ghosts:
             ghost_pos = self.orig_ghost_pos.copy()

@@ -15,7 +15,7 @@ NUM_ROWS = 31
 NUM_COLS = 28
 PACMAN = (32, 32)
 GHOSTS = (32, 32)
-PACMAN_SPEED = 4
+PACMAN_SPEED = 5
 GHOST_SPEED_FAST = 5
 GHOST_SPEED_SLOW = 2
 
@@ -27,8 +27,8 @@ GHOST_DELAYS = {
     "blue": 0
 }
 GHOST_TARGET_CHANGE = {
-    "inky": 8,
-    "pinky": 10,
+    "inky": 10,
+    "pinky": 8,
     "blinky": 6,
     "clyde": 7,
     "blue": 7

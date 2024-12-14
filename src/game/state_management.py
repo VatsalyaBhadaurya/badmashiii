@@ -5,6 +5,15 @@ class GameState:
         self.__fps = 60
         self.__direction = ""
         self.__current_time = None
+        self.__pacman_rect = None
+
+    @property
+    def pacman_rect(self):
+        return self.__pacman_rect
+    
+    @pacman_rect.setter
+    def pacman_rect(self, rect):
+        self.__pacman_rect = rect
     
     @property
     def current_time(self):
