@@ -20,8 +20,8 @@ GHOST_SPEED_FAST = 5
 GHOST_SPEED_SLOW = 2
 
 GHOST_DELAYS = {
-    "inky": 8000,
-    "pinky": 12000,
+    "inky": 12000,
+    "pinky": 8000,
     "blinky": 4000,
     "clyde": 16000,
     "blue": 0

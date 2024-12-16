@@ -6,7 +6,14 @@ class GameState:
         self.__direction = ""
         self.__current_time = None
         self.__pacman_rect = None
+        self.__ghost_pos = {}
 
+    def get_ghost_pos(self, name):
+        return self.__ghost_pos.get(name)
+    
+    def set_ghost_pos(self, name, val):
+        self.__ghost_pos[name] = val
+        
     @property
     def pacman_rect(self):
         return self.__pacman_rect

@@ -120,6 +120,7 @@ class Ghost(Sprite):
             return
         pos = self.paths[self.curr_idx]
         x, y = pos
+        self.game_state.set_ghost_pos(self.name, (x, y))
         xcoord, ycoord = get_coords_from_idx((x, y),
                                          self.start_x,
                                          self.start_y,
@@ -160,7 +161,10 @@ class Blinky(Ghost):
             )
     
     def set_paths(self, movables):
-        target = self.lock_on_target()
+        if self.mode == 'chase':
+            target = self.lock_on_target()
+        else:
+            target = random.choice(movables)
         start = (self.xidx, self.yidx)
         self.paths = a_star(self.tiny_matrix_fast, start, target)
         self.curr_idx = 0
@@ -179,9 +183,24 @@ class Inky(Ghost):
         self.release_delay = GHOST_DELAYS['inky']
         self.release_time = self.release_delay + self.start_time
         self.target_change_delay = self.release_time + GHOST_TARGET_CHANGE['inky']
-
+    
+    def lock_on_target(self):
+        blinky_pos = self.game_state.get_ghost_pos("blinky")
+        pinky_pos = self.game_state.get_ghost_pos("pinky")
+        if (pinky_pos is None or blinky_pos is None):
+            return
+        dx, dy = pinky_pos[0] - blinky_pos[0], pinky_pos[1] - blinky_pos[1]
+        max_distance = 4  # Example: limit to 8 cells
+        distance = min(max_distance, abs(dx), abs(dy))
+        inky_x = blinky_pos[0] + distance * (1 if dx > 0 else -1)
+        inky_y = blinky_pos[1] + distance * (1 if dy > 0 else -1)
+        return inky_x, inky_y
+        
     def set_paths(self, movables):
-        target = random.choice(movables)
+        if self.mode == 'chase':
+            target = self.lock_on_target()
+        if self.mode == 'panic' or target is None:
+            target = random.choice(movables)
         start = (self.xidx, self.yidx)
         self.paths = a_star(self.tiny_matrix_fast, start, target)
         self.curr_idx = 0
@@ -214,7 +233,10 @@ class Pinky(Ghost):
         return xidx, yidx + moves[self.game_state.direction]
         
     def set_paths(self, movables):
-        target = self.lock_on_target()
+        if self.mode == 'chase':
+            target = self.lock_on_target()
+        else:
+            target = random.choice(movables)
         start = (self.xidx, self.yidx)
         self.paths = a_star(self.tiny_matrix_fast, start, target)
         self.curr_idx = 0
@@ -232,8 +254,27 @@ class Clyde(Ghost):
         self.release_time = self.release_delay + self.start_time
         self.target_change_delay = self.release_time + GHOST_TARGET_CHANGE['clyde']
 
+    def lock_on_target(self):
+        threshold = 128  # Example threshold in pixels
+        clyde_pos = (self.ghost_x, self.ghost_y)
+        pac = self.game_state.pacman_rect
+        pacman_pos = (pac[0], pac[1])
+        distance = ((clyde_pos[0] - pacman_pos[0]) ** 2 + \
+                     (clyde_pos[1] - pacman_pos[1]) ** 2) ** 0.5
+        if distance > threshold:
+            return None
+        pacman_pos = get_idx_from_coords(pacman_pos[0],
+                                         pacman_pos[1],
+                                         self.start_x,
+                                         self.start_y,
+                                         self.speed)
+        return pacman_pos
+
     def set_paths(self, movables):
-        target = random.choice(movables)
+        if self.mode == 'chase':
+            target = self.lock_on_target()
+        if self.mode == 'panic' or target is None:
+            target = random.choice(movables)
         start = (self.xidx, self.yidx)
         self.paths = a_star(self.tiny_matrix_fast, start, target)
         self.curr_idx = 0
