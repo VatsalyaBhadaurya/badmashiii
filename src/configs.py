@@ -33,3 +33,4 @@ GHOST_TARGET_CHANGE = {
     "clyde": 7,
     "blue": 7
 }
+loading_screen_gif = "assets/other/loading.gif"

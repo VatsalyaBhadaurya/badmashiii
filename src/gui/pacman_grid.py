@@ -6,10 +6,12 @@ from src.sprites.pacman import Pacman
 from src.utils.coord_utils import (get_coords_from_idx, place_elements_offset,
                                    precompute_matrix_coords)
 from src.utils.draw_utils import (draw_circle, draw_debug_rects, draw_rect)
-
+from src.log_handle import get_logger
+logger = get_logger(__name__)
 
 class PacmanGrid:
     def __init__(self, screen, game_state):
+        logger.info("initializing pacman grid")
         self.function_mapper = {
             "void": self.draw_void,
             "wall": self.draw_wall,
@@ -23,6 +25,7 @@ class PacmanGrid:
         self._game_state = game_state
         self._level_number = self._game_state.level
         self.load_level(self._level_number)
+        logger.info("level loaded")
         self.pacman = Pacman(
             PACMAN[0],
             PACMAN[1],
@@ -34,12 +37,15 @@ class PacmanGrid:
             self._screen,
             self._coord_matrix,
         )
+        logger.info("pacman created")
         self.ghost = GhostManager(self.ghost_den,
                                   self.start_x, self.start_y,
                                   self._matrix,
                                   self.elec_pos,
                                   self._game_state,
                                   self._screen)
+        logger.info("ghosts created")
+        
     def get_json(self, path):
         with open(path) as fp:
             payload = json.load(fp)

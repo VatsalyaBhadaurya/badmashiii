@@ -1,3 +1,6 @@
+import time
+from concurrent.futures import ProcessPoolExecutor, as_completed
+
 from pygame.sprite import Sprite
 from pygame import image, transform, draw
 from pygame import time as pytime
@@ -9,6 +12,8 @@ from src.utils.coord_utils import (get_coords_from_idx,
                                    get_idx_from_coords)
 from src.utils.graph_utils import a_star
 from src.sprites.sprite_configs import GHOST_PATHS
+from src.log_handle import get_logger
+logger = get_logger(__name__)
 
 import random
 
@@ -51,6 +56,7 @@ class Ghost(Sprite):
         self.released = False
         self.anim_jump = -self.speed
         self.start_time = pytime.get_ticks()
+        self.move_time = pytime.get_ticks()
         self.game_state = game_state
         self.paths = paths
         self.xidx = None
@@ -97,17 +103,20 @@ class Ghost(Sprite):
             self.frame_rate = 10
         self.frame_rate -= 1
 
-    def is_movable(self, current_time):
+    def is_movable(self):
+        self.move_time = pytime.get_ticks()
         if not self.released:
             return False
         self.frame_rate -= 1
         if not self.paths:
             return True
-        if self.target == (self.xidx, self.yidx):
-            return True
-        if self.paths and self.curr_idx == len(self.paths)-1:
+        if self.move_time - self.start_time > 500:
+            self.start_time = pytime.get_ticks()
             return True
         return False
+    
+    def lock_on_target(self):
+        ...
 
     def set_paths(self, movables):
         ...
@@ -336,19 +345,30 @@ class GhostManager:
         for ghost in self.ghosts_list:
             if not ghost.released:
                 continue
-            if ghost.is_movable(self.game_state.current_time):
+            if ghost.is_movable():
                 ghost.set_paths(self.movables_5px)
     
     def manage_ghosts(self):
         self.monitor_ghosts()
         self.prepare_ghosts()
 
-    def tiny_matrix_loader(self):
+    def create_tiny_matrices(self):
         self.matrix_5px = get_tiny_matrix(self.matrix, CELL_SIZE[0], GHOST_SPEED_FAST)
         self.matrix_2px = get_tiny_matrix(self.matrix, CELL_SIZE[0], GHOST_SPEED_SLOW)
+    
+    def create_movables(self):
         self.movables_5px = get_movable_locations(self.matrix_5px, 
                                                   max_cell_size=CELL_SIZE[0],
                                                   cell_size=GHOST_SPEED_FAST)
         self.movables_2px = get_movable_locations(self.matrix_2px,
                                                   max_cell_size=CELL_SIZE[0],
                                                   cell_size=GHOST_SPEED_SLOW)
+    
+
+    def tiny_matrix_loader(self):
+        logger.info("preparing the tiny matrices for ghosts")
+        start = time.perf_counter()
+        self.create_tiny_matrices()
+        self.create_movables()
+        end = time.perf_counter()
+        logger.info("Tiny matrices for ghosts done: %s",(end-start))

@@ -7,13 +7,36 @@ class GameState:
         self.__current_time = None
         self.__pacman_rect = None
         self.__ghost_pos = {}
+        self.__is_loaded = False
+        self.__cache_5px = None
+        self.__cache_2px = None
+
+    @property
+    def cache_5px(self):
+        return self.__cache_5px
+    
+    @cache_5px.setter
+    def cache_5px(self, val):
+        self.__cache_5px = val
+
+    @property
+    def cache_2px(self):
+        return self.__cache_2px
+    
+    @cache_2px.setter
+    def cache_2px(self, val):
+        self.__cache_2px = val
+
+    @property
+    def is_loaded(self):
+        return self.__is_loaded
 
     def get_ghost_pos(self, name):
         return self.__ghost_pos.get(name)
     
     def set_ghost_pos(self, name, val):
         self.__ghost_pos[name] = val
-        
+
     @property
     def pacman_rect(self):
         return self.__pacman_rect
