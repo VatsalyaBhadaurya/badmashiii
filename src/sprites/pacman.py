@@ -2,6 +2,7 @@ from math import ceil
 
 from pygame import image, transform
 from pygame.sprite import Sprite
+import pygame.time as pytime
 
 from src.configs import CELL_SIZE, PACMAN_SPEED
 from src.sprites.sprite_configs import *
@@ -162,6 +163,9 @@ class Pacman(Sprite):
         )
         if self.matrix[r][c] == "dot":
             self.matrix[r][c] = "void"
+        elif self.matrix[r][c] == 'power':
+            self.matrix[r][c] = 'void'
+            self.game_state.is_pacman_powered = True
 
     def update(self):
         self.frame_update()

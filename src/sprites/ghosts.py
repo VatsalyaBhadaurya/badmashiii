@@ -1,5 +1,5 @@
 import time
-from concurrent.futures import ProcessPoolExecutor, as_completed
+from concurrent.futures import ProcessPoolExecutor
 
 from pygame.sprite import Sprite
 from pygame import image, transform, draw
@@ -36,7 +36,7 @@ class Ghost(Sprite):
         self.start_x = start_x
         self.start_y = start_y
         self.tiny_matrix_fast = tiny_matrix_fast
-        self.tiny_matrix_slow = tiny_matrix_slow
+        self.curr_tiny_matrix = self.tiny_matrix_fast
         self.frame_rate = frame_rate
         self.speed = GHOST_SPEED_FAST
         self.ghost_x, self.ghost_y = get_coords_from_idx(ghost_pos,
@@ -44,12 +44,12 @@ class Ghost(Sprite):
                                                          start_y,
                                                          self.speed,
                                                          self.speed,
-                                                         len(tiny_matrix_fast),
-                                                         len(tiny_matrix_fast[0])
+                                                         len(self.curr_tiny_matrix),
+                                                         len(self.curr_tiny_matrix[0])
                                                          )
         self.screen = screen
-        self.image = image.load(GHOST_PATHS[self.name][0])
-        self.image = transform.scale(self.image, PACMAN)
+        self.images_load()
+        self.image = self.normal_image
         self.rect = self.image.get_rect(topleft=(self.ghost_x,
                                                  self.ghost_y))
         self.mode = 'chase'
@@ -62,6 +62,15 @@ class Ghost(Sprite):
         self.xidx = None
         self.yidx = None
         self.curr_idx = 0
+        self.panic_start = pytime.get_ticks()
+    
+    def images_load(self):
+        def image_creation_helper(ghost_path):
+            im = image.load(ghost_path)
+            im = transform.scale(im, PACMAN)
+            return im
+        self.blue_image = image_creation_helper(GHOST_PATHS['blue'][0])
+        self.normal_image = image_creation_helper(GHOST_PATHS[self.name][0])
 
     def release_ghost(self, pos):
         self.released = True
@@ -70,14 +79,13 @@ class Ghost(Sprite):
         self.yidx = y
 
     def panic_mode(self):
-        self.speed = GHOST_SPEED_SLOW
-        self.speed = GHOST_SPEED_SLOW
+        self.panic_start = pytime.get_ticks()
         self.mode = 'panic'
+        self.image = self.blue_image
     
     def normal_mode(self):
-        self.speed = GHOST_SPEED_FAST
-        self.speed = GHOST_SPEED_FAST
         self.mode = 'chase'
+        self.image = self.normal_image
 
     def _draw_bounding_box(self):
         draw.rect(self.screen, Colors.RED, (self.ghost_x,
@@ -121,6 +129,12 @@ class Ghost(Sprite):
     def set_paths(self, movables):
         ...
 
+    def hit_astar(self, target):
+        start = (self.xidx, self.yidx)
+        self.paths = a_star(self.curr_tiny_matrix, start, target)
+        self.curr_idx = 0
+        self.target = target
+
     def move_ghost(self):
         if not self.released:
             return
@@ -135,18 +149,26 @@ class Ghost(Sprite):
                                          self.start_y,
                                          self.speed,
                                          self.speed,
-                                         len(self.tiny_matrix_fast),
-                                         len(self.tiny_matrix_fast[0]))
+                                         len(self.curr_tiny_matrix),
+                                         len(self.curr_tiny_matrix[0]))
         self.ghost_x = xcoord
         self.ghost_y = ycoord
         self.xidx = x
         self.yidx = y
         self.curr_idx += 1
 
+    def check_panic_end(self):
+        curr_time = pytime.get_ticks()
+        if self.mode != 'panic':
+            return
+        if (curr_time - self.panic_start) > GHOST_NORMAL_DELAY:
+            self.normal_mode()
+
     def update(self):
         self.draw_ghost()
         self.animate_den()
         self.move_ghost()
+        self.check_panic_end()
 
 class Blinky(Ghost):
     def __init__(self, ghost_pos: dict, start_x: float, 
@@ -174,10 +196,7 @@ class Blinky(Ghost):
             target = self.lock_on_target()
         else:
             target = random.choice(movables)
-        start = (self.xidx, self.yidx)
-        self.paths = a_star(self.tiny_matrix_fast, start, target)
-        self.curr_idx = 0
-        self.target = target
+        self.hit_astar(target)
             
 
 class Inky(Ghost):
@@ -210,10 +229,7 @@ class Inky(Ghost):
             target = self.lock_on_target()
         if self.mode == 'panic' or target is None:
             target = random.choice(movables)
-        start = (self.xidx, self.yidx)
-        self.paths = a_star(self.tiny_matrix_fast, start, target)
-        self.curr_idx = 0
-        self.target = target
+        self.hit_astar(target)
 
 class Pinky(Ghost):
     def __init__(self, ghost_pos: dict, start_x: float, 
@@ -237,6 +253,8 @@ class Pinky(Ghost):
                 self.start_y,
                 self.speed,
             )
+        if self.game_state.direction == '':
+            return xidx, yidx
         if self.game_state.direction in ['l', 'r']:
             return xidx + moves[self.game_state.direction], yidx
         return xidx, yidx + moves[self.game_state.direction]
@@ -246,10 +264,7 @@ class Pinky(Ghost):
             target = self.lock_on_target()
         else:
             target = random.choice(movables)
-        start = (self.xidx, self.yidx)
-        self.paths = a_star(self.tiny_matrix_fast, start, target)
-        self.curr_idx = 0
-        self.target = target
+        self.hit_astar(target)
 
 class Clyde(Ghost):
     def __init__(self, ghost_pos: dict, start_x: float, 
@@ -284,10 +299,7 @@ class Clyde(Ghost):
             target = self.lock_on_target()
         if self.mode == 'panic' or target is None:
             target = random.choice(movables)
-        start = (self.xidx, self.yidx)
-        self.paths = a_star(self.tiny_matrix_fast, start, target)
-        self.curr_idx = 0
-        self.target = target
+        self.hit_astar(target)
 
 class GhostManager:
     def __init__(self,
@@ -306,8 +318,7 @@ class GhostManager:
         self.orig_ghost_pos = ghost_pos
         self.tiny_matrix_loader()
         self.load_ghosts()
-        self.elec_pos = [elec_pos[0] *  (CELL_SIZE[0] // GHOST_SPEED_FAST),
-                         elec_pos[1] *  (CELL_SIZE[0] // GHOST_SPEED_FAST)]
+        self.elec_pos = elec_pos
 
     def load_ghosts(self):
         self.ghosts_list = []
@@ -330,14 +341,19 @@ class GhostManager:
         for ghost in self.ghosts_list:
             if (not ghost.released) and \
                     (self.game_state.current_time >= ghost.release_time):
-                ghost.release_ghost(self.elec_pos)
-                elec_cords = get_coords_from_idx(self.elec_pos,
+                nrows = len(self.matrix_5px) 
+                ncols = len(self.matrix_5px[0])
+                speed = GHOST_SPEED_FAST
+                self.elec_pos_rel = [self.elec_pos[0] *  (CELL_SIZE[0] // speed),
+                         self.elec_pos[1] *  (CELL_SIZE[0] // speed)]
+                ghost.release_ghost(self.elec_pos_rel)
+                elec_cords = get_coords_from_idx(self.elec_pos_rel,
                                                  self.start_x,
                                                  self.start_y,
-                                                 GHOST_SPEED_FAST,
-                                                 GHOST_SPEED_FAST,
-                                                 len(self.matrix_5px),
-                                                 len(self.matrix_5px[0]))
+                                                 speed,
+                                                 speed,
+                                                 nrows,
+                                                 ncols)
                 ghost.ghost_x = elec_cords[0]
                 ghost.ghost_y = elec_cords[1]
     
@@ -348,9 +364,18 @@ class GhostManager:
             if ghost.is_movable():
                 ghost.set_paths(self.movables_5px)
     
+    def make_ghosts_weak(self):
+        for ghost in self.ghosts_list:
+            if not ghost.released:
+                continue
+            if self.game_state.is_pacman_powered:
+                ghost.panic_mode()
+        self.game_state.is_pacman_powered = False
+    
     def manage_ghosts(self):
         self.monitor_ghosts()
         self.prepare_ghosts()
+        self.make_ghosts_weak()
 
     def create_tiny_matrices(self):
         self.matrix_5px = get_tiny_matrix(self.matrix, CELL_SIZE[0], GHOST_SPEED_FAST)

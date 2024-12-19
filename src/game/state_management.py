@@ -8,25 +8,16 @@ class GameState:
         self.__pacman_rect = None
         self.__ghost_pos = {}
         self.__is_loaded = False
-        self.__cache_5px = None
-        self.__cache_2px = None
+        self.__is_pacman_powered = False
 
     @property
-    def cache_5px(self):
-        return self.__cache_5px
+    def is_pacman_powered(self):
+        return self.__is_pacman_powered
     
-    @cache_5px.setter
-    def cache_5px(self, val):
-        self.__cache_5px = val
-
-    @property
-    def cache_2px(self):
-        return self.__cache_2px
-    
-    @cache_2px.setter
-    def cache_2px(self, val):
-        self.__cache_2px = val
-
+    @is_pacman_powered.setter
+    def is_pacman_powered(self, val):
+        self.__is_pacman_powered = val
+        
     @property
     def is_loaded(self):
         return self.__is_loaded
