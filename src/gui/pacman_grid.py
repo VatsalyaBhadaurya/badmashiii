@@ -1,7 +1,6 @@
 import json
 
 from src.configs import *
-from src.sprites.ghosts import GhostManager
 from src.sprites.pacman import Pacman
 from src.utils.coord_utils import (get_coords_from_idx, place_elements_offset,
                                    precompute_matrix_coords)
@@ -27,24 +26,13 @@ class PacmanGrid:
         self.load_level(self._level_number)
         logger.info("level loaded")
         self.pacman = Pacman(
-            PACMAN[0],
-            PACMAN[1],
-            game_state,
-            self._pacman_pos,
-            self.start_x,
-            self.start_y,
-            self._matrix,
             self._screen,
-            self._coord_matrix,
+            self._game_state,
+            self._matrix,
+            self._pacman_pos,
+            (self.start_x, self.start_y)
         )
         logger.info("pacman created")
-        self.ghost = GhostManager(self.ghost_den,
-                                  self.start_x, self.start_y,
-                                  self._matrix,
-                                  self.elec_pos,
-                                  self._game_state,
-                                  self._screen)
-        logger.info("ghosts created")
         
     def get_json(self, path):
         with open(path) as fp:
