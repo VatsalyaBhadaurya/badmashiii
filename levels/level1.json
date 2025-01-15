@@ -500,7 +500,7 @@
             "wall",
             "elec",
             "elec",
-            "elec",
+            "wall",
             "wall",
             "wall",
             "wall",
@@ -1189,7 +1189,7 @@
         17,
         16
     ],
-    "ghost_den": [14, 15],
+    "ghost_den": [14, 14],
     "elec": [11, 15],
     "extra_voids": [],
     "num_rows": 32,

@@ -39,7 +39,7 @@ class Pacman(Sprite):
         self.rect = self.image.get_rect(topleft=(self.pacman_x_coord,
                                                  self.pacman_y_coord))
     
-    def build_bounding_boxes(self, x, y):
+    def build_bounding_boxes(self, x: int | float, y: int | float):
         self.rect.x = x + (CELL_SIZE[0] * 2 - self.rect.width) // 2
         self.rect.y = y + (CELL_SIZE[1] * 2 - self.rect.height) // 2
         
@@ -102,13 +102,17 @@ class Pacman(Sprite):
                                                      len(self.tiny_matrix),
                                                      len(self.tiny_matrix[0]))
 
-    def edges_helper_vertical(self, row, col, additive):
+    def edges_helper_vertical(self, row: int, 
+                              col: int, 
+                              additive: int):
         for r in range(self.subdiv * 2):
             if self.tiny_matrix[row + r][col + additive] == "wall":
                 return False
         return True
 
-    def edge_helper_horizontal(self, row, col, additive):
+    def edge_helper_horizontal(self, row: int, 
+                               col: int, 
+                               additive: int):
         for c in range(self.subdiv * 2):
             if self.tiny_matrix[row + additive][col + c] == "wall":
                 return False
@@ -156,7 +160,7 @@ class Pacman(Sprite):
                 ):
                     self.move_direction = "d" 
  
-    def move_pacman(self, dt):
+    def move_pacman(self, dt: float):
         match self.move_direction:
             case "l":
                 if self.edges_helper_vertical(self.tiny_start_x, self.tiny_start_y, -1):
@@ -185,7 +189,7 @@ class Pacman(Sprite):
                                        CELL_SIZE[0]*2, CELL_SIZE[0]*2)
         
 
-    def update(self, dt):
+    def update(self, dt: float):
         self.frame_update()
         self.build_bounding_boxes(self.rect_x, self.rect_y)
         self.movement_bind()

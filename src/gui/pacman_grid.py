@@ -2,6 +2,7 @@ import json
 
 from src.configs import *
 from src.sprites.pacman import Pacman
+from src.sprites.ghosts import GhostManager
 from src.utils.coord_utils import (get_coords_from_idx, place_elements_offset,
                                    precompute_matrix_coords)
 from src.utils.draw_utils import (draw_circle, draw_debug_rects, draw_rect)
@@ -30,6 +31,13 @@ class PacmanGrid:
             self._game_state,
             self._matrix,
             self._pacman_pos,
+            (self.start_x, self.start_y)
+        )
+        self.ghost = GhostManager(
+            self._screen,
+            self._game_state,
+            self._matrix,
+            self.ghost_den,
             (self.start_x, self.start_y)
         )
         logger.info("pacman created")

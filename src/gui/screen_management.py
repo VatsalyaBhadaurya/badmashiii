@@ -15,6 +15,8 @@ class ScreenManager:
         self.pacman = PacmanGrid(screen, game_state)
         logger.info("pacman grid created")
         self.all_sprites.add(self.pacman.pacman)
+        for ghost in self.pacman.ghost.ghosts_list:
+            self.all_sprites.add(ghost)
 
     def draw_screens(self):
         self.pacman.draw_level()
