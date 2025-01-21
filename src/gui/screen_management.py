@@ -1,8 +1,8 @@
 from src.configs import *
 from src.gui.pacman_grid import *
 from src.gui.loading_screen import LoadingScreen
-from src.utils.coord_utils import center_element
 from src.log_handle import get_logger
+
 logger = get_logger(__name__)
 
 class ScreenManager:
@@ -18,6 +18,17 @@ class ScreenManager:
         for ghost in self.pacman.ghost.ghosts_list:
             self.all_sprites.add(ghost)
 
+    def pacman_dead_reset(self):
+        if self._game_state.is_pacman_dead:
+            self._game_state.is_pacman_dead = False
+            self._game_state.direction = ""
+            self._game_state.pacman_direction = None
+            self.all_sprites.empty()
+            self.pacman.reset_stage()
+            self.all_sprites.add(self.pacman.pacman)
+            for ghost in self.pacman.ghost.ghosts_list:
+                self.all_sprites.add(ghost)
+
     def draw_screens(self):
         self.pacman.draw_level()
-        
+        self.pacman_dead_reset()

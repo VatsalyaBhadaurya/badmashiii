@@ -200,7 +200,6 @@ class Pacman(Sprite):
 
         self.game_state.pacman_rect = (self.rect_x, self.rect_y, 
                                        CELL_SIZE[0]*2, CELL_SIZE[0]*2)
-        
 
     def update(self, dt: float):
         self.frame_update()

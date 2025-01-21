@@ -13,6 +13,7 @@ from pygame.sprite import Sprite
 from pygame import Surface
 from pygame import image, transform
 import pygame.time as pytime
+from pygame.time import wait
 from pygame.rect import Rect
 
 import random
@@ -252,11 +253,18 @@ class Ghost(Sprite, ABC):
 
     def check_collisions(self):
         ghost_rect = Rect(self.rect.x, self.rect.y, 
-                          PACMAN[0], PACMAN[1])
-        pacman_rect = Rect(*self._game_state.pacman_rect)
-        if self.is_scared:
-            if ghost_rect.colliderect(pacman_rect):
-                self.reset_ghost()
+                          PACMAN[0]//2, PACMAN[1]//2)
+        pacman_coords = (self._game_state.pacman_rect[0],
+                         self._game_state.pacman_rect[1],
+                         self._game_state.pacman_rect[2]//2,
+                         self._game_state.pacman_rect[3]//2)
+        pacman_rect = Rect(pacman_coords)
+        if ghost_rect.colliderect(pacman_rect):
+            if self.is_scared:
+                self.reset_ghost()  
+            else:
+                self._game_state.is_pacman_dead = True
+                wait(1000)
 
     def update(self, dt):
         self.build_bounding_boxes(self.rect_x, self.rect_y)

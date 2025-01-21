@@ -111,6 +111,22 @@ class PacmanGrid:
             curr_x = self.start_x
             curr_y += CELL_SIZE[0]
 
+    def reset_stage(self):
+        self.pacman = Pacman(
+            self._screen,
+            self._game_state,
+            self._matrix,
+            self._pacman_pos,
+            (self.start_x, self.start_y)
+        )
+        self.ghost = GhostManager(
+            self._screen,
+            self._game_state,
+            self._matrix,
+            self.ghost_den,
+            (self.start_x, self.start_y)
+        )
+        
     def draw_outliners(self):
         draw_debug_rects(
             self.start_x, self.start_y, 128, 140, 5, Colors.GREEN, self._screen

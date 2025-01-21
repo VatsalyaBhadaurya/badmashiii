@@ -18,6 +18,15 @@ class GameState:
         self._scared_time = None
         self._power_up_event = None
         self._power_event_trigger_time = None
+        self._is_pacman_dead = False
+
+    @property
+    def is_pacman_dead(self):
+        return self._is_pacman_dead
+    
+    @is_pacman_dead.setter
+    def is_pacman_dead(self, val):
+        self._is_pacman_dead = val
 
     @property
     def power_event_trigger_time(self):
