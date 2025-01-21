@@ -23,10 +23,17 @@ class GameRun:
         self.all_sprites = pygame.sprite.Group()
         self.gui = ScreenManager(self.screen, self.game_state, self.all_sprites)
         logger.info("screen manager object created")
+    
+    def create_ghost_mode_event(self):
+        CUSTOM_EVENT = pygame.USEREVENT + 1
+        pygame.time.set_timer(CUSTOM_EVENT, 
+                              self.game_state.mode_change_events * 1000)
+        self.game_state.custom_event = CUSTOM_EVENT
 
     def main(self):
         clock = pygame.time.Clock()
         dt = None
+        self.create_ghost_mode_event()
         while self.game_state.running:
             self.game_state.current_time = pygame.time.get_ticks()
             for event in pygame.event.get():

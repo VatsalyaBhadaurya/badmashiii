@@ -1189,11 +1189,13 @@
         17,
         16
     ],
-    "ghost_den": [14, 14],
+    "ghost_den": [14, 15],
     "elec": [11, 15],
     "extra_voids": [],
+    "scatter_times": [4, 20, 3, 20, 3, 20, 3],
     "num_rows": 32,
     "num_cols": 35,
     "cell_width": 20,
-    "cell_height": 20
+    "cell_height": 20,
+    "power_up_time": 6000
 }

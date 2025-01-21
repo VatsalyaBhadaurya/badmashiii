@@ -15,7 +15,7 @@ NUM_ROWS = 31
 NUM_COLS = 28
 PACMAN = (32, 32)
 GHOSTS = (32, 32)
-PACMAN_SPEED = 5
+PACMAN_SPEED = 4
 GHOST_SPEED_FAST = 5
 GHOST_SPEED_SLOW = 2
 GHOST_NORMAL_DELAY = 5000
@@ -33,5 +33,11 @@ GHOST_TARGET_CHANGE = {
     "blinky": 6,
     "clyde": 7,
     "blue": 7
+}
+GHOST_SCATTER_TARGETS = {
+    'blinky': (0, 30),
+    "pinky": (0, 0),
+    "inky": (31, 0),
+    "clyde": (31, 30)
 }
 loading_screen_gif = "assets/other/loading.gif"

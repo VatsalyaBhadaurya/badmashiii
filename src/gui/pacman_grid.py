@@ -56,6 +56,10 @@ class PacmanGrid:
         self._matrix = level_json["matrix"]
         self._pacman_pos = level_json["pacman_start"]
         self.elec_pos = level_json['elec']
+        self.mode_change_times = level_json['scatter_times']
+        self.power_up_time = level_json['power_up_time']
+        self._game_state.scared_time = self.power_up_time
+        self._game_state.mode_change_events = self.mode_change_times
         self.start_x, self.start_y = place_elements_offset(
             SCREEN_WIDTH,
             SCREEN_HEIGHT,

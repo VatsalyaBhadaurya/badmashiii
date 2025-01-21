@@ -2,7 +2,8 @@ from math import ceil
 
 from pygame import image, transform
 from pygame.sprite import Sprite
-from pygame import Surface
+from pygame import Surface, USEREVENT
+from pygame.time import set_timer, get_ticks
 
 from src.configs import CELL_SIZE, PACMAN_SPEED, PACMAN
 from src.game.state_management import GameState
@@ -127,6 +128,14 @@ class Pacman(Sprite):
             self.tiny_start_y = len(self.tiny_matrix[0]) - (self.subdiv * 3)
             self.rect_x = self.coord_matrix[self.tiny_start_x][-self.subdiv*2 - 4][0]
 
+    def create_power_up_event(self):
+        CUSTOM_EVENT = USEREVENT + 2
+        set_timer(CUSTOM_EVENT, 
+                self.game_state.scared_time)
+        self.game_state.power_up_event = CUSTOM_EVENT
+        self.game_state.is_pacman_powered = True
+        self.game_state.power_event_trigger_time = get_ticks()
+
     def eat_dots(self):
         r, c = get_idx_from_coords(
             self.rect.x, self.rect.y, *self.start_pos, CELL_SIZE[0]
@@ -136,29 +145,33 @@ class Pacman(Sprite):
                 self.matrix[r][c] = "void"
             case "power":
                 self.matrix[r][c] = "void"
-                self.game_state.is_pacman_powered = True
-
+                self.create_power_up_event()
+                
     def movement_bind(self):
         match self.game_state.direction:
             case 'l':
                 if self.edges_helper_vertical(self.tiny_start_x, self.tiny_start_y, -1):
                     self.move_direction = "l"
+                    self.game_state.pacman_direction = 'l'
             
             case 'r':
                 if self.edges_helper_vertical(
                     self.tiny_start_x, self.tiny_start_y, self.subdiv * 2
                 ):
                     self.move_direction = "r"
+                    self.game_state.pacman_direction = 'r'
             
             case 'u':
                 if self.edge_helper_horizontal(self.tiny_start_x, self.tiny_start_y, -1):
                     self.move_direction = "u"
+                    self.game_state.pacman_direction = 'u'
             
             case 'd':
                 if self.edge_helper_horizontal(
                     self.tiny_start_x, self.tiny_start_y, self.subdiv * 2
                 ):
                     self.move_direction = "d" 
+                    self.game_state.pacman_direction = 'd'
  
     def move_pacman(self, dt: float):
         match self.move_direction:

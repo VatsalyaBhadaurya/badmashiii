@@ -1,17 +1,20 @@
 import math
 
+DIRECTION_MAPPER = {"up":[(-1, 0), (-1, 1)],
+                    "left":[(0, -1), (1, -1)],
+                    "down":[(2, 0), (2, 1)],
+                    "right":[(0, 2), (1, 2)]}
+BLOCKERS = ['wall', 'elec']
 
-def get_lerp(curr_pos: tuple[float, float],
-             target_pos: tuple[float, float],
-             t: float,
-             velocity: float):
-    if t < 1:
-        t += velocity
-    else:
-        t = 1
-    x = (1 - t) * curr_pos[0] + t * target_pos[0]
-    y = (1 - t) * curr_pos[1] + t * target_pos[1]
-    return x, y
+def get_is_move_valid(curr_pos, direction, matrix):
+    next_indices = DIRECTION_MAPPER[direction]
+    for r, c in next_indices:
+        next_c = curr_pos[1] + c
+        if next_c < 0 or next_c >= len(matrix[0]): #because there is only 1 place where ghost can go out of bounds.
+            continue
+        if matrix[curr_pos[0] + r][curr_pos[1] + c] in BLOCKERS:
+            return False
+    return True
 
 def eucliad_distance(point1, point2):
     return math.sqrt((point1[0] - point2[0])**2 + (point1[1] - point2[1])**2)
@@ -22,50 +25,41 @@ def get_direction(ghost_matrix_pos: tuple[int, int],
                 prev: tuple[int, int]):
     g1, g2 = ghost_matrix_pos
     t1, t2 = target_matrix_pos
-    num_rows, num_cols = len(matrix), len(matrix[0])
-    directions = ['up', 'left', 'down',' right']
-    blockers = ['wall', 'elec']
-    curr_min = float('-inf')
+    num_rows, _ = len(matrix), len(matrix[0])
+    next_direction_mapper = {"up":(-1, 0), "down": (1, 0), "left":(0, -1), "right": (0, 1)}
+    directions = ['up', 'left', 'down','right']
+    curr_min = float('inf')
     target_dir = None
     for direction in directions:
-        coord_check = None
-        match direction:
-            case "right":
-                if (g1 + 2 < num_cols) and \
-                        (matrix[g1 + 2] not in blockers):
-                    coord_check = (g1 + 1, g2)
-            case "left":
-                if (g1 - 1 >= 0) and \
-                        (matrix[g1 - 1] not in blockers):
-                    coord_check = (g1 - 1, g2)
-            case "up":
-                if(g2 - 1 >= 0) and \
-                        (matrix[g2 - 1] not in blockers):
-                    coord_check = (g1, g2 - 1)
-            case "down":
-                if (g2 + 2 < num_rows) and \
-                        (matrix[g2 + 2] not in blockers):
-                    coord_check = (g1, g2 + 1)
-        if coord_check == prev:
-            continue   
-        distance = eucliad_distance(coord_check, (t1, t2))
+        is_movable = get_is_move_valid((g1, g2), direction, matrix)
+        if not is_movable:
+            continue
+        direction_additives = next_direction_mapper[direction]
+        next_x, next_y = g1 + direction_additives[0], g2 + direction_additives[1]
+        if next_x >= num_rows or next_x < 0:
+            continue
+        if next_direction_mapper[direction] == prev:
+            continue
+        distance = eucliad_distance((next_x, next_y), (t1, t2))
         if distance < curr_min:
             curr_min = distance
             target_dir = direction
+    # print(ghost_matrix_pos, matrix[ghost_matrix_pos[0]][ghost_matrix_pos[1]])
+    # print(target_dir)
     if target_dir is None:
-        raise ValueError("Oh my god, the ghost is stuck, The game crashed.")
-    return target_dir
+        print('error', prev, ghost_matrix_pos, matrix[ghost_matrix_pos[0]][ghost_matrix_pos[1]])
+        raise ValueError("Oh my god, I don't know what to do, im crashing the game")
+    return next_direction_mapper[target_dir]
 
-def is_intersection(ghost_pos: tuple[int, int], matrix: list[list[str]]) -> bool:
-    curr_moves = 0
-    p1, p2 = ghost_pos
-    directions = ((-1, 0),
-                  (2, 0),
-                  (0, -1),
-                  (0, 2))
-    for direction in directions:
-        t1, t2 = direction
-        if matrix[p1 + t1][p2 + t2] not in ['wall', 'elec']:
-            curr_moves += 1
+def get_is_intersection(ghost_matrix_pos: tuple[int, int], 
+                        matrix: list[list[str]],
+                        prev=None):
+    possible_moves = 0
+    for k, _ in DIRECTION_MAPPER.items():
+        if prev == k:
+            continue
+        if get_is_move_valid(ghost_matrix_pos, k, matrix):
+            possible_moves += 1
+    return possible_moves > 1
 
-    return curr_moves >= 2
+

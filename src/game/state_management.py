@@ -9,6 +9,86 @@ class GameState:
         self.__ghost_pos = {}
         self.__is_loaded = False
         self.__is_pacman_powered = False
+        self._ghost_mode = 'scatter'
+        self._mode_change_events = None
+        self.__current_mode_index = 0
+        self._custom_event = None
+        self._pacman_direction = None
+        self._blinky_matrix_pos = None
+        self._scared_time = None
+        self._power_up_event = None
+        self._power_event_trigger_time = None
+
+    @property
+    def power_event_trigger_time(self):
+        return self._power_event_trigger_time
+    
+    @power_event_trigger_time.setter
+    def power_event_trigger_time(self, val):
+        self._power_event_trigger_time = val
+
+    @property
+    def power_up_event(self):
+        return self._power_up_event
+    
+    @power_up_event.setter
+    def power_up_event(self, val):
+        self._power_up_event = val
+
+    @property
+    def scared_time(self):
+        return self._scared_time
+    
+    @scared_time.setter
+    def scared_time(self, val):
+        self._scared_time = val
+
+    @property
+    def blinky_matrix_pos(self):
+        return self._blinky_matrix_pos
+    
+    @blinky_matrix_pos.setter
+    def blinky_matrix_pos(self, val):
+        self._blinky_matrix_pos = val
+
+    @property
+    def pacman_direction(self):
+        return self._pacman_direction
+    
+    @pacman_direction.setter
+    def pacman_direction(self, val):
+        self._pacman_direction = val
+
+    @property
+    def custom_event(self):
+        return self._custom_event
+    
+    @custom_event.setter
+    def custom_event(self, val):
+        self._custom_event = val
+
+    @property
+    def mode_change_events(self):
+        if self.__current_mode_index >= len(self._mode_change_events):
+            curr_event = self._mode_change_events[-1]
+        else:
+            curr_event = self._mode_change_events[self.__current_mode_index]
+            self.__current_mode_index += 1
+        return curr_event
+
+    @mode_change_events.setter
+    def mode_change_events(self, val):
+        self._mode_change_events = val
+
+    @property
+    def ghost_mode(self):
+        return self._ghost_mode
+    
+    @ghost_mode.setter
+    def ghost_mode(self, value):
+        if value not in ['scatter', 'chase', 'scared']:
+            raise ValueError("Only scatter, scared or chase modes are available")
+        self._ghost_mode = value
 
     @property
     def is_pacman_powered(self):
