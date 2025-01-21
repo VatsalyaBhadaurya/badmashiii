@@ -12,6 +12,7 @@ from src.utils.coord_utils import (get_coords_from_idx,
                                    get_idx_from_coords, 
                                    get_tiny_matrix,
                                    precompute_matrix_coords)
+from src.sounds import SoundManager
 
 class Pacman(Sprite):
     def __init__(self, 
@@ -32,6 +33,7 @@ class Pacman(Sprite):
         self.calculate_tiny_matrix()
         self.calculate_coord_matrix()
         self.frame_delay = 5
+        self.sound = SoundManager()
 
     def load_image(self):
         self.image = self.frames[self.curr_frame_idx]
@@ -143,9 +145,11 @@ class Pacman(Sprite):
         match self.matrix[r][c]:
             case "dot":
                 self.matrix[r][c] = "void"
+                self.sound.play_sound("dot")
             case "power":
                 self.matrix[r][c] = "void"
                 self.create_power_up_event()
+                self.sound.play_sound("dot")
                 
     def movement_bind(self):
         match self.game_state.direction:

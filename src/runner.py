@@ -6,6 +6,7 @@ from src.configs import *
 from src.game.event_management import EventHandler
 from src.game.state_management import GameState
 from src.gui.screen_management import ScreenManager
+from src.sounds import SoundManager
 from src.log_handle import get_logger
 logger = get_logger(__name__)
 
@@ -30,10 +31,19 @@ class GameRun:
                               self.game_state.mode_change_events * 1000)
         self.game_state.custom_event = CUSTOM_EVENT
 
+    def initialize_sounds(self):
+        sound_manager = SoundManager()
+        sound_manager.load_sound("dot", "assets/sounds/pacman_chomp.mp3")
+        sound_manager.load_sound("death","assets/sounds/pacman_death.wav")
+        sound_manager.load_sound("eat_ghost","assets/sounds/pacman_eatghost.wav")
+        sound_manager.set_background_music("assets/sounds/backgroud.mp3")
+        # sound_manager.play_background_music()
+
     def main(self):
         clock = pygame.time.Clock()
         dt = None
         self.create_ghost_mode_event()
+        self.initialize_sounds()
         while self.game_state.running:
             self.game_state.current_time = pygame.time.get_ticks()
             for event in pygame.event.get():
