@@ -13,21 +13,33 @@ class SoundManager:
         if not hasattr(self, "_initialized"):
             self._initialized = True
             self._sounds = {}
+            self._channels = {}
             self._background_music = None
             pygame.mixer.pre_init()
             pygame.mixer.set_num_channels(64)
             # pygame.mixer.init()
     
-    def load_sound(self, name, filepath, volumne=0.5):
+    def load_sound(self, name, filepath, 
+                   volumne=0.5, 
+                   freq=200,
+                   channel=0):
         """Loads a sound effect and assigns it a name."""
-        self._sounds[name] = pygame.mixer.Sound(filepath)
-        self._sounds[name].set_volume(volumne)
+        self._sounds[name] = {"sound": pygame.mixer.Sound(filepath),
+                              "freq": freq,
+                              'last_played': 0}
+        self._sounds[name]['sound'].set_volume(volumne)
+        self._channels[name] = pygame.mixer.Channel(channel)
 
     def play_sound(self, name):
         """Plays a specific sound effect."""
         if name in self._sounds:
-            if not pygame.mixer.get_busy():
-                self._sounds[name].play()
+            # if not pygame.mixer.get_busy():
+                now = pygame.time.get_ticks()
+                freq = self._sounds[name]['freq']
+                last_played = self._sounds[name]['last_played']
+                if now - last_played > freq: 
+                    self._channels[name].play(self._sounds[name]['sound'])
+                    self._sounds[last_played] = now
         else:
             print(f"Sound '{name}' not found!")
 

@@ -6,6 +6,7 @@ class Colors:
     BLUE = (0, 0, 255)
     WALL = (112, 167, 255)
     YELLOW = (252, 186, 3)
+    WALL_BLUE = (24, 24, 217)
 
 
 SCREEN_WIDTH = 1024

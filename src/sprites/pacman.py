@@ -40,11 +40,14 @@ class Pacman(Sprite):
 
     def count_dots_powers(self):
         collectibles = 0
-        for row in self.matrix:
-            for cell in row:
-                if cell in ['dot', 'power']:
+        for row in range(len(self.matrix)):
+            for col in range(len(self.matrix[0])):
+                if col + 1 >= len(self.matrix[0]):
+                    continue
+                if self.matrix[row][col] in ['dot', 'power'] and \
+                        self.matrix[row+1][col] not in ['wall', 'elec', 'null']:
                     collectibles += 1
-        logger.info("total_collectibles: %s",collectibles)
+        # logger.info("total_collectibles: %s",collectibles)
         return collectibles
 
     def load_image(self):
@@ -227,4 +230,3 @@ class Pacman(Sprite):
         self.boundary_check()
         self.eat_dots()
         self.frame_direction_update()
-        # logger.info("total collectibles left: %s",self.collectibles)
