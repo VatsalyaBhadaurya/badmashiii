@@ -33,11 +33,11 @@ class GameRun:
 
     def initialize_sounds(self):
         sound_manager = SoundManager()
-        sound_manager.load_sound("dot", "assets/sounds/pacman_chomp.mp3")
-        sound_manager.load_sound("death","assets/sounds/pacman_death.wav")
-        sound_manager.load_sound("eat_ghost","assets/sounds/pacman_eatghost.wav")
+        sound_manager.load_sound("dot", "assets/sounds/pacman_chomp.wav")
+        sound_manager.load_sound("death","assets/sounds/pacman_death.wav", 0.7)
+        sound_manager.load_sound("eat_ghost","assets/sounds/pacman_eatghost.wav", 0.6)
         sound_manager.set_background_music("assets/sounds/backgroud.mp3")
-        # sound_manager.play_background_music()
+        sound_manager.play_background_music()
 
     def main(self):
         clock = pygame.time.Clock()

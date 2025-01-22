@@ -83,7 +83,7 @@ class PacmanGrid:
             kwargs["w"],
             kwargs["h"],
             self._screen,
-            Colors.WALL,
+            Colors.WALL
         )
 
     def draw_dot(self, **kwargs):

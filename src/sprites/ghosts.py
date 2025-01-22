@@ -23,6 +23,8 @@ from src.sprites.sprite_configs import GHOST_PATHS
 from src.configs import PACMAN, CELL_SIZE, GHOST_DELAYS, GHOST_SCATTER_TARGETS
 from src.utils.coord_utils import get_coords_from_idx, get_idx_from_coords
 from src.utils.ghost_movement_utils import get_direction, get_is_intersection, get_is_move_valid
+from src.sounds import SoundManager
+
 from src.log_handle import get_logger
 logger = get_logger(__name__)
 
@@ -59,6 +61,7 @@ class Ghost(Sprite, ABC):
         self.is_scared = False
         self.curr_pos = None
         self.release_time = None
+        self.sounds = SoundManager()
         self.load_images()
 
     def _get_coords_from_idx(self, p1):
@@ -262,8 +265,10 @@ class Ghost(Sprite, ABC):
         if ghost_rect.colliderect(pacman_rect):
             if self.is_scared:
                 self.reset_ghost()  
+                self.sounds.play_sound("eat_ghost")
             else:
                 self._game_state.is_pacman_dead = True
+                self.sounds.play_sound("death")
                 wait(1000)
 
     def update(self, dt):

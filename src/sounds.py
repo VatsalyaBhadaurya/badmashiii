@@ -14,16 +14,20 @@ class SoundManager:
             self._initialized = True
             self._sounds = {}
             self._background_music = None
-            pygame.mixer.init()
+            pygame.mixer.pre_init()
+            pygame.mixer.set_num_channels(64)
+            # pygame.mixer.init()
     
-    def load_sound(self, name, filepath):
+    def load_sound(self, name, filepath, volumne=0.5):
         """Loads a sound effect and assigns it a name."""
         self._sounds[name] = pygame.mixer.Sound(filepath)
+        self._sounds[name].set_volume(volumne)
 
     def play_sound(self, name):
         """Plays a specific sound effect."""
         if name in self._sounds:
-            self._sounds[name].play()
+            if not pygame.mixer.get_busy():
+                self._sounds[name].play()
         else:
             print(f"Sound '{name}' not found!")
 
@@ -31,7 +35,7 @@ class SoundManager:
         """Loads and sets the background music."""
         self._background_music = filepath
         pygame.mixer.music.load(filepath)
-        pygame.mixer.music.set_volume(0.5)  # Adjust the volume
+        pygame.mixer.music.set_volume(0.2)  # Adjust the volume
 
     def play_background_music(self, loops=-1, start=0.0, fade_ms=0):
         """Starts playing the background music."""

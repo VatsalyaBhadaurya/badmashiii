@@ -13,6 +13,8 @@ from src.utils.coord_utils import (get_coords_from_idx,
                                    get_tiny_matrix,
                                    precompute_matrix_coords)
 from src.sounds import SoundManager
+from src.log_handle import get_logger
+logger = get_logger(__name__)
 
 class Pacman(Sprite):
     def __init__(self, 
@@ -34,6 +36,16 @@ class Pacman(Sprite):
         self.calculate_coord_matrix()
         self.frame_delay = 5
         self.sound = SoundManager()
+        self.collectibles = self.count_dots_powers()
+
+    def count_dots_powers(self):
+        collectibles = 0
+        for row in self.matrix:
+            for cell in row:
+                if cell in ['dot', 'power']:
+                    collectibles += 1
+        logger.info("total_collectibles: %s",collectibles)
+        return collectibles
 
     def load_image(self):
         self.image = self.frames[self.curr_frame_idx]
@@ -146,10 +158,12 @@ class Pacman(Sprite):
             case "dot":
                 self.matrix[r][c] = "void"
                 self.sound.play_sound("dot")
+                self.collectibles -= 1
             case "power":
                 self.matrix[r][c] = "void"
                 self.create_power_up_event()
                 self.sound.play_sound("dot")
+                self.collectibles -= 1
                 
     def movement_bind(self):
         match self.game_state.direction:
@@ -213,3 +227,4 @@ class Pacman(Sprite):
         self.boundary_check()
         self.eat_dots()
         self.frame_direction_update()
+        # logger.info("total collectibles left: %s",self.collectibles)
