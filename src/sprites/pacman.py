@@ -232,3 +232,5 @@ class Pacman(Sprite):
         self.boundary_check()
         self.eat_dots()
         self.frame_direction_update()
+        if self.collectibles == 0:
+            self.game_state.level_complete = True

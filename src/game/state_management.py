@@ -1,3 +1,5 @@
+from src.configs import DOT_POINT
+
 class GameState:
     def __init__(self):
         self.__level = 1
@@ -21,7 +23,16 @@ class GameState:
         self._is_pacman_dead = False
         self._highscore = 0
         self._mins_played = 0
-        self._points = -20
+        self._points = -DOT_POINT
+        self._level_complete = False
+
+    @property
+    def level_complete(self):
+        return self._level_complete
+    
+    @level_complete.setter
+    def level_complete(self, val):
+        self._level_complete = val
 
     @property
     def points(self):
