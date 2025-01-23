@@ -39,7 +39,7 @@ class SoundManager:
                 last_played = self._sounds[name]['last_played']
                 if now - last_played > freq: 
                     self._channels[name].play(self._sounds[name]['sound'])
-                    self._sounds[last_played] = now
+                    self._sounds[name]['last_played'] = now
         else:
             print(f"Sound '{name}' not found!")
 
