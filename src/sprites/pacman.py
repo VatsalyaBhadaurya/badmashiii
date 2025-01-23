@@ -5,7 +5,7 @@ from pygame.sprite import Sprite
 from pygame import Surface, USEREVENT
 from pygame.time import set_timer, get_ticks
 
-from src.configs import CELL_SIZE, PACMAN_SPEED, PACMAN
+from src.configs import CELL_SIZE, PACMAN_SPEED, PACMAN, DOT_POINT, POWER_POINT
 from src.game.state_management import GameState
 from src.sprites.sprite_configs import *
 from src.utils.coord_utils import (get_coords_from_idx, 
@@ -162,11 +162,13 @@ class Pacman(Sprite):
                 self.matrix[r][c] = "void"
                 self.sound.play_sound("dot")
                 self.collectibles -= 1
+                self.game_state.points += DOT_POINT
             case "power":
                 self.matrix[r][c] = "void"
                 self.create_power_up_event()
                 self.sound.play_sound("dot")
                 self.collectibles -= 1
+                self.game_state.points += POWER_POINT
                 
     def movement_bind(self):
         match self.game_state.direction:
@@ -230,3 +232,5 @@ class Pacman(Sprite):
         self.boundary_check()
         self.eat_dots()
         self.frame_direction_update()
+        if self.collectibles == 0:
+            self.game_state.level_complete = True

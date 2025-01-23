@@ -20,7 +20,7 @@ import random
 
 from src.game.state_management import GameState
 from src.sprites.sprite_configs import GHOST_PATHS
-from src.configs import PACMAN, CELL_SIZE, GHOST_DELAYS, GHOST_SCATTER_TARGETS
+from src.configs import PACMAN, CELL_SIZE, GHOST_DELAYS, GHOST_SCATTER_TARGETS, GHOST_POINT
 from src.utils.coord_utils import get_coords_from_idx, get_idx_from_coords
 from src.utils.ghost_movement_utils import get_direction, get_is_intersection, get_is_move_valid
 from src.sounds import SoundManager
@@ -266,6 +266,7 @@ class Ghost(Sprite, ABC):
             if self.is_scared:
                 self.reset_ghost()  
                 self.sounds.play_sound("eat_ghost")
+                self._game_state.points += GHOST_POINT
             else:
                 self._game_state.is_pacman_dead = True
                 self.sounds.play_sound("death")
