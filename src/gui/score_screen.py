@@ -16,7 +16,7 @@ class ScoreScreen:
             SCREEN_HEIGHT,
             200, 
             200,
-            0.15,
+            0.25,
             0.05
         )
         font.init()

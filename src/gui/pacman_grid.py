@@ -65,7 +65,7 @@ class PacmanGrid:
             SCREEN_HEIGHT,
             CELL_SIZE[0] * num_cols,
             CELL_SIZE[0] * num_rows,
-            0.15,
+            0.5,
             0.5,
         )
         self._coord_matrix = precompute_matrix_coords(
