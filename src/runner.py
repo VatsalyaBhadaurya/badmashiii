@@ -1,6 +1,7 @@
 import sys
 
 import pygame
+import json
 
 from src.configs import *
 from src.game.event_management import EventHandler
@@ -24,6 +25,12 @@ class GameRun:
         self.all_sprites = pygame.sprite.Group()
         self.gui = ScreenManager(self.screen, self.game_state, self.all_sprites)
         logger.info("screen manager object created")
+
+    def initialize_highscore(self):
+        with open("assets/levels/stats.json") as fp:
+            stats = json.load(fp)
+            self.game_state.highscore = stats['highscore']
+            self.game_state.mins_played = stats['mins_played']
     
     def create_ghost_mode_event(self):
         CUSTOM_EVENT = pygame.USEREVENT + 1

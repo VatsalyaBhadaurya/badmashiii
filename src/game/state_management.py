@@ -19,6 +19,33 @@ class GameState:
         self._power_up_event = None
         self._power_event_trigger_time = None
         self._is_pacman_dead = False
+        self._highscore = 0
+        self._mins_played = 0
+        self._points = -20
+
+    @property
+    def points(self):
+        return self._points
+    
+    @points.setter
+    def points(self, val):
+        self._points = val
+
+    @property
+    def highscore(self):
+        return self._highscore
+    
+    @highscore.setter
+    def highscore(self, val):
+        self._highscore = val
+    
+    @property
+    def mins_played(self):
+        return self._mins_played
+    
+    @mins_played.setter
+    def mins_played(self, val):
+        self._mins_played = val
 
     @property
     def is_pacman_dead(self):
