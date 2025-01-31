@@ -1,5 +1,5 @@
-# PyPacman
-Pacman clone written in python
+# VC-Yogi pacman
+made just for fun no offence needed
 
 # How to test it out
 
