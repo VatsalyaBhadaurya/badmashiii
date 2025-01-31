@@ -23,7 +23,8 @@ class ScoreScreen:
         self.font = font.Font(None, 36)
 
     def draw_scores(self):
-        score_text = "SCORE: " + str(self._game_state.points)
+
+        score_text = "VC Yogi uWu: " + str(self._game_state.points)
         score_surface = self.font.render(score_text, True, Colors.WHITE)
         self._screen.blit(score_surface, (self.start_x, self.start_y))
 

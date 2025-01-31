@@ -16,7 +16,7 @@ class GameRun:
         logger.info("About to initialize pygame")
         pygame.init()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-        pygame.display.set_caption("Py-Pacman")
+        pygame.display.set_caption("VC Yogi uWu")
         logger.info("pygame initialized")
         self.game_state = GameState()
         logger.info("game state object created")
